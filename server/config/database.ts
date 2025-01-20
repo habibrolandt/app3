@@ -7,15 +7,15 @@ dotenv.config()
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb+srv://leatitiaguehi:Leatitia2020@cluster0.yiv09.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 
 // Options de configuration Mongoose
-const options = {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-} as mongoose.ConnectOptions
+// const options = {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+// } as mongoose.ConnectOptions
 
 // Fonction de connexion à la base de données
 export async function connectDatabase() {
   try {
-    await mongoose.connect(MONGODB_URI, options)
+    await mongoose.connect(MONGODB_URI)
     console.log("✅ Connecté à MongoDB Atlas avec succès")
   } catch (error) {
     console.error("❌ Erreur de connexion à MongoDB:", error)

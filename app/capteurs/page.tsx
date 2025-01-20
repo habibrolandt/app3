@@ -1,61 +1,88 @@
 'use client'
 
+import { useEffect, useState } from 'react'
+import axios from 'axios'
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import { Battery, Droplets, Thermometer, Wind } from 'lucide-react'
 
-const capteurs = [
-  {
-    id: 1,
-    nom: 'Capteur Température',
-    icon: Thermometer,
-    valeur: '22°C',
-    status: 'normal',
-    batterie: '85%',
-    donnees: [
-      { time: '08:00', valeur: 18 },
-      { time: '10:00', valeur: 20 },
-      { time: '12:00', valeur: 22 },
-      { time: '14:00', valeur: 24 },
-      { time: '16:00', valeur: 23 },
-      { time: '18:00', valeur: 21 },
-    ]
-  },
-  {
-    id: 2,
-    nom: 'Capteur Humidité',
-    icon: Droplets,
-    valeur: '65%',
-    status: 'attention',
-    batterie: '72%',
-    donnees: [
-      { time: '08:00', valeur: 60 },
-      { time: '10:00', valeur: 62 },
-      { time: '12:00', valeur: 65 },
-      { time: '14:00', valeur: 63 },
-      { time: '16:00', valeur: 64 },
-      { time: '18:00', valeur: 65 },
-    ]
-  },
-  {
-    id: 3,
-    nom: 'Capteur Vent',
-    icon: Wind,
-    valeur: '12 km/h',
-    status: 'normal',
-    batterie: '90%',
-    donnees: [
-      { time: '08:00', valeur: 8 },
-      { time: '10:00', valeur: 10 },
-      { time: '12:00', valeur: 12 },
-      { time: '14:00', valeur: 15 },
-      { time: '16:00', valeur: 14 },
-      { time: '18:00', valeur: 12 },
-    ]
-  },
-]
+type DonneeCapteur = {
+  _id: string
+  humiditeSol: number
+  pluieDetectee: boolean
+  modeManuel: boolean
+  systemeGlobal: boolean
+  pompeActivee?: boolean
+  message?: string
+  date: string
+}
 
 export default function PageCapteurs() {
+  const [capteurs, setCapteurs] = useState<any[]>([]) // Liste des capteurs et leurs données
+  const [loading, setLoading] = useState<boolean>(true) // Pour gérer l'état de chargement
+
+  // Effect pour récupérer les données à partir de l'API
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/donnees/stream') // Assure-toi que l'URL est correcte
+        const donnees = response.data
+
+        // Transformer les données pour correspondre au format que tu utilises dans la carte
+        const capteursAdaptés = [
+          {
+            id: 1,
+            nom: 'Capteur Température',
+            icon: Thermometer,
+            valeur: `${donnees[0]?.humiditeSol}°C`, // Utilisation de l'humidité du sol comme exemple
+            status: 'normal',
+            batterie: '85%',
+            donnees: donnees.map((item: DonneeCapteur) => ({
+              time: new Date(item.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+              valeur: item.humiditeSol, // Humidité du sol comme exemple
+            })),
+          },
+          {
+            id: 2,
+            nom: 'Capteur Humidité',
+            icon: Droplets,
+            valeur: `${donnees[0]?.humiditeSol}%`, // Humidité comme valeur
+            status: 'attention',
+            batterie: '72%',
+            donnees: donnees.map((item: DonneeCapteur) => ({
+              time: new Date(item.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+              valeur: item.humiditeSol, // Humidité comme exemple
+            })),
+          },
+          {
+            id: 3,
+            nom: 'Capteur Vent',
+            icon: Wind,
+            valeur: '12 km/h', // Exemple fixe pour le vent
+            status: 'normal',
+            batterie: '90%',
+            donnees: donnees.map((item: DonneeCapteur) => ({
+              time: new Date(item.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+              valeur: item.humiditeSol, // Exemple, remplacer par une vraie donnée
+            })),
+          },
+        ]
+        
+        setCapteurs(capteursAdaptés)
+      } catch (error) {
+        console.error('Erreur lors de la récupération des données:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  if (loading) {
+    return <div>Chargement des données...</div>
+  }
+
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold text-gray-900">
@@ -113,4 +140,3 @@ export default function PageCapteurs() {
     </div>
   )
 }
-

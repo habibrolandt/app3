@@ -41,6 +41,13 @@ export function useDonneesTempsReel() {
         setError("Impossible de se connecter au serveur. Veuillez réessayer plus tard.")
       })
 
+      // Vérifiez si socketInstance est correctement défini avant de l'utiliser
+      if (socketInstance) {
+        socketInstance.on("nouvelles-donnees", (nouvelleDonnee: DonneesCapteur) => {
+          setDonnees((prev) => [nouvelleDonnee, ...prev].slice(0, 100))
+        })
+      }
+
       setSocket(socketInstance)
     }
 
@@ -60,13 +67,6 @@ export function useDonneesTempsReel() {
         setError("Impossible de charger les données. Veuillez réessayer plus tard.")
       })
 
-    // Écoute des nouvelles données
-    if (socketInstance) {
-      socketInstance.on("nouvelles-donnees", (nouvelleDonnee: DonneesCapteur) => {
-        setDonnees((prev) => [nouvelleDonnee, ...prev].slice(0, 100))
-      })
-    }
-
     // Nettoyage à la déconnexion
     return () => {
       if (socketInstance) {
@@ -77,4 +77,3 @@ export function useDonneesTempsReel() {
 
   return { donnees, isConnected, error }
 }
-
