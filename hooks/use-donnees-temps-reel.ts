@@ -14,40 +14,67 @@ export function useDonneesTempsReel() {
   const [donnees, setDonnees] = useState<DonneesCapteur[]>([])
   const [socket, setSocket] = useState<Socket | null>(null)
   const [isConnected, setIsConnected] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    // Connexion initiale à Socket.io
-    const socketInstance = io(BACKEND_URL)
-    setSocket(socketInstance)
+    let socketInstance: Socket | null = null
+
+    const connectSocket = () => {
+      socketInstance = io(BACKEND_URL, {
+        reconnectionAttempts: 5,
+        reconnectionDelay: 1000,
+      })
+
+      socketInstance.on("connect", () => {
+        setIsConnected(true)
+        setError(null)
+        console.log("Connecté au serveur Socket.io")
+      })
+
+      socketInstance.on("disconnect", () => {
+        setIsConnected(false)
+        console.log("Déconnecté du serveur Socket.io")
+      })
+
+      socketInstance.on("connect_error", (err) => {
+        console.error("Erreur de connexion Socket.io:", err)
+        setError("Impossible de se connecter au serveur. Veuillez réessayer plus tard.")
+      })
+
+      setSocket(socketInstance)
+    }
+
+    connectSocket()
 
     // Récupération des données initiales
     fetch(`${BACKEND_URL}/api/donnees/stream`)
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`Erreur HTTP: ${res.status}`)
+        }
+        return res.json()
+      })
       .then((data) => setDonnees(data))
-      .catch((err) => console.error("Erreur lors de la récupération des données:", err))
-
-    // Gestion des événements de connexion
-    socketInstance.on("connect", () => {
-      setIsConnected(true)
-      console.log("Connecté au serveur Socket.io")
-    })
-
-    socketInstance.on("disconnect", () => {
-      setIsConnected(false)
-      console.log("Déconnecté du serveur Socket.io")
-    })
+      .catch((err) => {
+        console.error("Erreur lors de la récupération des données:", err)
+        setError("Impossible de charger les données. Veuillez réessayer plus tard.")
+      })
 
     // Écoute des nouvelles données
-    socketInstance.on("nouvelles-donnees", (nouvelleDonnee: DonneesCapteur) => {
-      setDonnees((prev) => [nouvelleDonnee, ...prev].slice(0, 100))
-    })
+    if (socketInstance) {
+      socketInstance.on("nouvelles-donnees", (nouvelleDonnee: DonneesCapteur) => {
+        setDonnees((prev) => [nouvelleDonnee, ...prev].slice(0, 100))
+      })
+    }
 
     // Nettoyage à la déconnexion
     return () => {
-      socketInstance.disconnect()
+      if (socketInstance) {
+        socketInstance.disconnect()
+      }
     }
   }, [])
 
-  return { donnees, isConnected }
+  return { donnees, isConnected, error }
 }
 
