@@ -1,7 +1,7 @@
 "use client"
 
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
-import { CheckCircle, XCircle, Thermometer, Droplets } from "lucide-react"
+import {Thermometer, Droplets } from "lucide-react"
 import { useDonneesTempsReel } from "@/hooks/use-donnees-temps-reel"
 import { motion, AnimatePresence } from "framer-motion"
 

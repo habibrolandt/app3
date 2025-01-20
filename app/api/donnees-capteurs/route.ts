@@ -1,8 +1,8 @@
-import { Server } from 'socket.io'
-import { NextApiResponseServerIO } from '@/types/next'
+// import { Server } from 'socket.io'
+// import { NextApiResponseServerIO } from '@/types/next'
 import { NextResponse } from 'next/server'
 
-let irrigationActive = false
+const irrigationActive = false
 const SEUIL_HUMIDITE = 30 // Seuil d'humidité en pourcentage
 
 const donneesCapteurs = new Map()

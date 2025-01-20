@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Card, CardContent } from "../../components/ui/card"
 import { Button } from "../../components/ui/button"
-import { AlertTriangle, CheckCircle, Clock, Filter } from "lucide-react"
+import { AlertTriangle, CheckCircle, Clock } from "lucide-react"
 
 type Severite = "haute" | "moyenne" | "basse"
 type Status = "en_cours" | "resolu"

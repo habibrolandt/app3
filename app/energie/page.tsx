@@ -4,11 +4,9 @@ import { useState } from "react"
 import { motion } from "framer-motion"
 import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card"
 import { Button } from "../../components/ui/button"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs"
+import { Tabs, TabsList, TabsTrigger } from "../../components/ui/tabs"
 import { Battery, Sun, Zap, DollarSign, Lightbulb, ChevronDown, ChevronUp } from "lucide-react"
 import {
-  LineChart,
-  Line,
   BarChart,
   Bar,
   XAxis,

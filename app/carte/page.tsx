@@ -6,7 +6,7 @@ import { Button } from "../../components/ui/button"
 import { Input } from "../../components/ui/input"
 import { Progress } from "../../components/ui/progress"
 import { motion, AnimatePresence } from "framer-motion"
-import { Wheat, Sprout, Flower2, DropletIcon, Maximize2, Minimize2, Search, Power, ArrowUpDown } from "lucide-react"
+import { Wheat, Sprout, Flower2, DropletIcon, Maximize2, Minimize2, Search, ArrowUpDown } from "lucide-react"
 import MapClient from "./map-client"
 
 const getCultureIcon = (culture: string) => {

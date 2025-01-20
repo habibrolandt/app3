@@ -3,7 +3,7 @@
 import { cn } from '../lib/utils'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, Map, ActivitySquare, Bell, Settings, Users, Leaf, MessageSquare, AlertTriangle, Battery } from 'lucide-react'
+import { LayoutDashboard, Map, ActivitySquare, Bell, Users, AlertTriangle, Battery } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 const menuItems = [
