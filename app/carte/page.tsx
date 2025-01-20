@@ -211,7 +211,7 @@ export default function PageCarte() {
                       </AnimatePresence>
 
                       <div className="flex items-center justify-between pt-4">
-                        <Button
+                        {/* <Button
                           variant={parcelle.irrigation === "Active" ? "default" : "secondary"}
                           size="sm"
                           className="w-full"
@@ -219,7 +219,7 @@ export default function PageCarte() {
                         >
                           <Power className="h-4 w-4 mr-2" />
                           {parcelle.irrigation === "Active" ? "Désactiver" : "Activer"} l'irrigation
-                        </Button>
+                        </Button> */}
                       </div>
                     </div>
                   </CardContent>
