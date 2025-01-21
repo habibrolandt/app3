@@ -2,8 +2,22 @@ import express from "express"
 import { createServer } from "http"
 import { Server } from "socket.io"
 import cors from "cors"
-import { connectDatabase } from "./config/database.ts"
-import { DonneesCapteur } from "./models/DonneesCapteur.ts"
+import { connectDatabase } from "./config/database.js"
+import { DonneesCapteur } from "./models/DonneesCapteur.js"
+import dotenv from "dotenv"
+import type { Request, Response } from "express"
+
+dotenv.config()
+
+// Types pour les requêtes
+interface DonneesRequest {
+  humiditeSol: number
+  pluieDetectee: boolean
+  modeManuel: boolean
+  systemeGlobal: boolean
+  pompeActivee?: boolean
+  message?: string
+}
 
 // Initialisation des applications
 const app = express()
@@ -12,28 +26,43 @@ const io = new Server(httpServer, {
   cors: {
     origin: process.env.FRONTEND_URL || "http://localhost:3000",
     methods: ["GET", "POST"],
+    credentials: true,
   },
 })
 
 // Middleware
-app.use(cors())
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL || "http://localhost:3000",
+    credentials: true,
+  }),
+)
 app.use(express.json())
 
 // Connexion à la base de données
 connectDatabase()
 
 // Route POST pour recevoir les données des capteurs
-app.post("/api/donnees", async (req, res) => {
+app.post("/api/donnees", async (req: Request<{}, {}, DonneesRequest>, res: Response) => {
   try {
     const { humiditeSol, pluieDetectee, modeManuel, systemeGlobal } = req.body
 
     // Validation des données
-    if (humiditeSol === undefined || 
-        pluieDetectee === undefined || 
-        modeManuel === undefined || 
-        systemeGlobal === undefined) {
+    if (
+      humiditeSol === undefined ||
+      pluieDetectee === undefined ||
+      modeManuel === undefined ||
+      systemeGlobal === undefined
+    ) {
       return res.status(400).json({
-        error: "Les champs humiditeSol, pluieDetectee, modeManuel et systemeGlobal sont requis"
+        error: "Les champs humiditeSol, pluieDetectee, modeManuel et systemeGlobal sont requis",
+      })
+    }
+
+    // Validation de l'humidité
+    if (humiditeSol < 0 || humiditeSol > 100) {
+      return res.status(400).json({
+        error: "L'humidité doit être comprise entre 0 et 100",
       })
     }
 
@@ -43,7 +72,6 @@ app.post("/api/donnees", async (req, res) => {
       pluieDetectee,
       modeManuel,
       systemeGlobal,
-      // pompeActivee et message sont optionnels car ils ont des valeurs par défaut
     })
 
     // Sauvegarde dans la base de données
@@ -60,21 +88,9 @@ app.post("/api/donnees", async (req, res) => {
 })
 
 // Route GET pour le streaming des données
-app.get("/api/donnees/stream", async (req, res) => {
+app.get("/api/donnees/stream", async (_req: Request, res: Response) => {
   try {
-    // Récupération des 100 dernières entrées
-    const donnees = await DonneesCapteur.find()
-      .sort({ date: -1 })
-      .limit(100)
-      .select({
-        humiditeSol: 1,
-        pluieDetectee: 1,
-        modeManuel: 1,
-        systemeGlobal: 1,
-        pompeActivee: 1,
-        message: 1,
-        date: 1
-      })
+    const donnees = await DonneesCapteur.find().sort({ date: -1 }).limit(100).select("-__v")
 
     res.json(donnees)
   } catch (error) {
@@ -83,20 +99,10 @@ app.get("/api/donnees/stream", async (req, res) => {
   }
 })
 
-// Ajouter une route pour récupérer la dernière donnée
-app.get("/api/donnees/last", async (req, res) => {
+// Route pour récupérer la dernière donnée
+app.get("/api/donnees/last", async (_req: Request, res: Response) => {
   try {
-    const derniereDonnee = await DonneesCapteur.findOne()
-      .sort({ date: -1 })
-      .select({
-        humiditeSol: 1,
-        pluieDetectee: 1,
-        modeManuel: 1,
-        systemeGlobal: 1,
-        pompeActivee: 1,
-        message: 1,
-        date: 1
-      })
+    const derniereDonnee = await DonneesCapteur.findOne().sort({ date: -1 }).select("-__v")
 
     if (!derniereDonnee) {
       return res.status(404).json({ message: "Aucune donnée trouvée" })
@@ -110,24 +116,26 @@ app.get("/api/donnees/last", async (req, res) => {
 })
 
 // Route pour mettre à jour l'état de la pompe
-app.post("/api/pompe", async (req, res) => {
+app.post("/api/pompe", async (req: Request<{}, {}, { pompeActivee: boolean }>, res: Response) => {
   try {
     const { pompeActivee } = req.body
 
     if (pompeActivee === undefined) {
       return res.status(400).json({
-        error: "Le champ pompeActivee est requis"
+        error: "Le champ pompeActivee est requis",
       })
     }
 
-    // Créer une nouvelle entrée avec l'état de la pompe mis à jour
+    // Récupérer la dernière donnée pour conserver l'humidité
+    const derniereDonnee = await DonneesCapteur.findOne().sort({ date: -1 })
+
     const nouvelleDonnee = new DonneesCapteur({
-      humiditeSol: 0, // Valeur par défaut ou dernière valeur connue
-      pluieDetectee: false,
-      modeManuel: true, // Force le mode manuel quand on active/désactive la pompe
+      humiditeSol: derniereDonnee?.humiditeSol || 0,
+      pluieDetectee: derniereDonnee?.pluieDetectee || false,
+      modeManuel: true,
       systemeGlobal: true,
       pompeActivee: pompeActivee,
-      message: `Pompe ${pompeActivee ? 'activée' : 'désactivée'} manuellement`
+      message: Pompe ${pompeActivee ? "activée" : "désactivée"} manuellement,
     })
 
     await nouvelleDonnee.save()
@@ -152,5 +160,5 @@ io.on("connection", (socket) => {
 // Démarrage du serveur
 const PORT = process.env.PORT || 5000
 httpServer.listen(PORT, () => {
-  console.log(`🚀 Serveur démarré sur le port ${PORT}`)
+  console.log(` 🚀 Serveur démarré sur le port ${PORT}`)
 })

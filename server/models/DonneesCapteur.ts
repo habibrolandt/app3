@@ -1,36 +1,59 @@
-import mongoose from "mongoose";
+import mongoose from "mongoose"
 
-// Définition du schéma
-const donneesCapteurSchema = new mongoose.Schema({
+export interface IDonneesCapteur {
+  humiditeSol: number
+  pluieDetectee: boolean
+  modeManuel: boolean
+  systemeGlobal: boolean
+  pompeActivee: boolean
+  message?: string
+  date: Date
+}
+
+const donneesCapteurSchema = new mongoose.Schema<IDonneesCapteur>({
   humiditeSol: {
     type: Number,
     required: true,
+    min: 0,
+    max: 100,
   },
   pluieDetectee: {
     type: Boolean,
     required: true,
+    default: false,
   },
   modeManuel: {
     type: Boolean,
     required: true,
+    default: false,
   },
   systemeGlobal: {
     type: Boolean,
     required: true,
+    default: true,
   },
   pompeActivee: {
     type: Boolean,
-    default: false, // Par défaut, la pompe est désactivée
+    default: false,
   },
   message: {
     type: String,
-    default: null, // Champ optionnel pour les messages spécifiques
+    default: "",
   },
   date: {
     type: Date,
     default: Date.now,
   },
-});
+})
 
-// Création et export du modèle
-export const DonneesCapteur = mongoose.model("DonneesCapteur", donneesCapteurSchema);
+// Middleware pour vérifier les seuils d'humidité
+donneesCapteurSchema.pre("save", function (next) {
+  if (this.humiditeSol < 30 && !this.pompeActivee && !this.modeManuel) {
+    this.pompeActivee = true
+    this.message = "Irrigation automatique activée - Humidité basse"
+  }
+  next()
+})
+
+export const DonneesCapteur = mongoose.model<IDonneesCapteur>("DonneesCapteur", donneesCapteurSchema)
+

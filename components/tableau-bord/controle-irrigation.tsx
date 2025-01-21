@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
-import { Switch } from '@/components/ui/switch'
+import { Switch } from '../../components/ui/switch'
 import { Label } from '../ui/label'
 import { Droplet } from 'lucide-react'
 

@@ -1,25 +1,29 @@
-"use client"
+"use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
-import {Thermometer, Droplets } from "lucide-react"
-import { useDonneesTempsReel } from "@/hooks/use-donnees-temps-reel"
-import { motion, AnimatePresence } from "framer-motion"
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Thermometer, Droplets } from "lucide-react";
+import { useDonneesTempsReel } from "../../hooks/use-donnees-temps-reel";
+import { motion, AnimatePresence } from "framer-motion";
 
 export function StatutCapteurs() {
-  const { donnees, isConnected } = useDonneesTempsReel()
-  const derniereDonnee = donnees[0]
+  const { donnees, isConnected } = useDonneesTempsReel();
+  const derniereDonnee = donnees?.[0];
 
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           <span>État des Capteurs</span>
-          <span className={`h-2 w-2 rounded-full ${isConnected ? "bg-green-500" : "bg-red-500"}`} />
+          <span
+            className={`h-2 w-2 rounded-full ${
+              isConnected ? "bg-green-500" : "bg-red-500"
+            }`}
+          />
         </CardTitle>
       </CardHeader>
       <CardContent>
         <AnimatePresence>
-          {derniereDonnee && (
+          {derniereDonnee ? (
             <div className="space-y-4">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -30,7 +34,11 @@ export function StatutCapteurs() {
                   <Thermometer className="h-5 w-5 text-orange-500" />
                   <span>Température</span>
                 </div>
-                <span className="font-bold">{derniereDonnee.temperature.toFixed(1)}°C</span>
+                <span className="font-bold">
+                  {derniereDonnee.temperature != null
+                    ? `${derniereDonnee.temperature.toFixed(1)}°C`
+                    : "N/A"}
+                </span>
               </motion.div>
 
               <motion.div
@@ -42,17 +50,25 @@ export function StatutCapteurs() {
                   <Droplets className="h-5 w-5 text-blue-500" />
                   <span>Humidité</span>
                 </div>
-                <span className="font-bold">{derniereDonnee.humidite.toFixed(1)}%</span>
+                <span className="font-bold">
+                  {derniereDonnee.humidite != null
+                    ? `${derniereDonnee.humidite.toFixed(1)}%`
+                    : "N/A"}
+                </span>
               </motion.div>
 
               <div className="text-xs text-gray-500 mt-2">
-                Dernière mise à jour: {new Date(derniereDonnee.date).toLocaleTimeString()}
+                Dernière mise à jour:{" "}
+                {derniereDonnee.date
+                  ? new Date(derniereDonnee.date).toLocaleTimeString()
+                  : "Non disponible"}
               </div>
             </div>
+          ) : (
+            <p>Aucune donnée disponible</p>
           )}
         </AnimatePresence>
       </CardContent>
     </Card>
-  )
+  );
 }
-
