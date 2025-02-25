@@ -1,36 +1,39 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+ceci est une application web permettant aux agriculteurs de consulter les données en irrigations et autres sur leurs différentes culture(manioc, riz, etc..). cette plate-forme leur permet aussi de controler l'irrigation a distance de leurs champs. 
 
-## Getting Started
 
-First, run the development server:
+## Technologies utilisées:
 
-```bash
+Pour le développement de cette application web, nous avons utilisé les technologies suivantes:
+- Frontend: Next.js, tailwindcss
+- Backend: Node.js avec Express.js, C++
+- Base de données: MongoDB Atlas
+- Design: Figma
+- test: Jest
+
+
+# Executer le projet-Frontend:
+
+Pour exécuter le projet coté frontend, la commande a utilisée est:
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+# Executer le projet-Backend:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Pour déémarrer le serveur de cet projet, vous devez d'abord créer un fichier .env dans lequel vous mettriez votre chaine de connexion a votre base de données MongoDB Atlas ou Compass
+puis votre éxecutez la commande suivante: 
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+npm run dev:server . dans le dossier server.
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Apprendre d'avantage sur Next.js
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Pour apprendre d'avantage sur la technologies Next.js, veuillez consulter la documentation:
+
+- [Next.js Documentation](https://nextjs.org/docs) 
+- [Learn Next.js](https://nextjs.org/learn) 
+
+
