@@ -37,3 +37,15 @@ Pour apprendre d'avantage sur la technologies Next.js, veuillez consulter la doc
 - [Learn Next.js](https://nextjs.org/learn) 
 
 
+# Quelques images du projet
+
+![Première image](assets/image1.jpg)
+[Deuxième image](assets/image2.jpg)
+[Troisième image](assets/image3.jpg)
+[Quatrième image](assets/image4.jpg)
+[Cinquième image](assets/image5.jpg)
+[Sixième image](assets/image6.jpg)
+[Septième image](assets/image7.jpg)
+
+
+<img src="assets/image1.jpg" alt="Aperçu de l'application" width="400"/>
