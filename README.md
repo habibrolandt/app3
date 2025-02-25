@@ -39,13 +39,13 @@ Pour apprendre d'avantage sur la technologies Next.js, veuillez consulter la doc
 
 # Quelques images du projet
 
-![Première image](assets/image1.jpg)
-[Deuxième image](assets/image2.jpg)
-[Troisième image](assets/image3.jpg)
-[Quatrième image](assets/image4.jpg)
-[Cinquième image](assets/image5.jpg)
-[Sixième image](assets/image6.jpg)
-[Septième image](assets/image7.jpg)
+(assets/image1.jpg)
+(assets/image2.jpg)
+(assets/image3.jpg)
+(assets/image4.jpg)
+(assets/image5.jpg)
+(assets/image6.jpg)
+(assets/image7.jpg)
 
 
 <img src="assets/image1.jpg" alt="Aperçu de l'application" width="400"/>
