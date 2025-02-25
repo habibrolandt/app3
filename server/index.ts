@@ -135,7 +135,7 @@ app.post("/api/pompe", async (req: Request<{}, {}, { pompeActivee: boolean }>, r
       modeManuel: true,
       systemeGlobal: true,
       pompeActivee: pompeActivee,
-      message: Pompe ${pompeActivee ? "activée" : "désactivée"} manuellement,
+      message: `Pompe ${pompeActivee ? "activée" : "désactivée"} manuellement`,
     })
 
     await nouvelleDonnee.save()
@@ -147,6 +147,7 @@ app.post("/api/pompe", async (req: Request<{}, {}, { pompeActivee: boolean }>, r
     res.status(500).json({ error: "Erreur serveur" })
   }
 })
+
 
 // Gestion des connexions Socket.io
 io.on("connection", (socket) => {
