@@ -49,3 +49,9 @@ Pour apprendre d'avantage sur la technologies Next.js, veuillez consulter la doc
 
 
 <img src="assets/image1.jpg" alt="Aperçu de l'application" width="400"/>
+<img src="assets/image2.jpg" alt="Aperçu de l'application" width="400"/>
+<img src="assets/image3.jpg" alt="Aperçu de l'application" width="400"/>
+<img src="assets/image4.jpg" alt="Aperçu de l'application" width="400"/>
+<img src="assets/image5.jpg" alt="Aperçu de l'application" width="400"/>
+<img src="assets/image6.jpg" alt="Aperçu de l'application" width="400"/>
+<img src="assets/image7.jpg" alt="Aperçu de l'application" width="400"/>
