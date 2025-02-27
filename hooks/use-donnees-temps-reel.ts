@@ -54,14 +54,19 @@ export function useDonneesTempsReel() {
     connectSocket()
 
     // Récupération des données initiales
+    console.log("BACKEND_URL:", BACKEND_URL)
     fetch(`${BACKEND_URL}/api/donnees/stream`)
       .then((res) => {
+        console.log("HTTP Response Status:", res.status)
         if (!res.ok) {
           throw new Error(`Erreur HTTP: ${res.status}`)
         }
         return res.json()
       })
-      .then((data) => setDonnees(data))
+      .then((data) => {
+        console.log("Données reçues:", data)
+        setDonnees(data)
+      })
       .catch((err) => {
         console.error("Erreur lors de la récupération des données:", err)
         setError("Impossible de charger les données. Veuillez réessayer plus tard.")

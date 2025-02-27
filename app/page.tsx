@@ -1,3 +1,4 @@
+import { ChatBot } from "@/components/tableau-bord/chat-bot"
 import { MetriqueTableauBord } from "../components/tableau-bord/metrique"
 import { ConsommationEau } from "../components/tableau-bord/consommation-eau"
 import { PrevisionMeteo } from "../components/tableau-bord/prevision-meteo"
@@ -39,6 +40,7 @@ export default function PageTableauBord() {
         <ActivitesRecentes />
         <RecommandationsIA />
       </div>
+      <ChatBot />
     </div>
   )
 }
