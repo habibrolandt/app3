@@ -1,14 +1,13 @@
+import { SectionIrrigation } from "@/components/tableau-bord/section-irrigation"
+import { MetriqueTableauBord } from "@/components/tableau-bord/metrique"
+import { ConsommationEau } from "@/components/tableau-bord/consommation-eau"
+import { PrevisionMeteo } from "@/components/tableau-bord/prevision-meteo"
+import { StatutCapteurs } from "@/components/tableau-bord/statut-capteurs"
+import { ActivitesRecentes } from "@/components/tableau-bord/activites-recentes"
+import { RecommandationsIA } from "@/components/tableau-bord/recommandations-ia"
+import { ConsommationEnergie } from "@/components/tableau-bord/consommation-energie"
+import { CarteInteractive } from "@/components/tableau-bord/carte-interactive"
 import { ChatBot } from "@/components/tableau-bord/chat-bot"
-import { MetriqueTableauBord } from "../components/tableau-bord/metrique"
-import { ConsommationEau } from "../components/tableau-bord/consommation-eau"
-import { PrevisionMeteo } from "../components/tableau-bord/prevision-meteo"
-import { StatutCapteurs } from "../components/tableau-bord/statut-capteurs"
-import { ActivitesRecentes } from "../components/tableau-bord/activites-recentes"
-import { RecommandationsIA } from "../components/tableau-bord/recommandations-ia"
-import { ConsommationEnergie } from "../components/tableau-bord/consommation-energie"
-import { CarteInteractive } from "../components/tableau-bord/carte-interactive"
-import { ControleIrrigation } from "../components/tableau-bord/controle-irrigation"
-import { IrrigationManuelle } from "../components/tableau-bord/irrigation-manuelle"
 
 export default function PageTableauBord() {
   return (
@@ -17,9 +16,10 @@ export default function PageTableauBord() {
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         <MetriqueTableauBord />
-        <ControleIrrigation />
-        <IrrigationManuelle />
       </div>
+
+      {/* Section d'irrigation sur toute la largeur */}
+      <SectionIrrigation />
 
       <div className="grid gap-6 md:grid-cols-2">
         <ConsommationEau />
@@ -44,4 +44,3 @@ export default function PageTableauBord() {
     </div>
   )
 }
-

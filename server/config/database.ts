@@ -4,7 +4,7 @@ import dotenv from "dotenv"
 dotenv.config()
 
 // URL de connexion MongoDB Atlas
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb+srv://leatitiaguehi:Leatitia2020@cluster0.yiv09.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb+srv://leatitiaguehi1:Leatitia2020@cluster0.yiv09.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 
 // Options de configuration Mongoose
 // const options = {

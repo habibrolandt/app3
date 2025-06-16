@@ -36,7 +36,7 @@ export function BarreLaterale() {
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.5 }}
         >
-          GREEN 3
+          AGRI-CONNECT
         </motion.h1>
         <motion.p 
           className="text-sm text-muted-foreground"
